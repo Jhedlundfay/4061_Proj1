@@ -41,6 +41,7 @@ void show_error_message(char * ExecName)
 void show_targets(target_t targets[], int nTargetCount)
 {
 	//Write your warmup code here
+	//random comment
 	
 }
 
