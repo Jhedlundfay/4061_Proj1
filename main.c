@@ -35,13 +35,53 @@ void show_error_message(char * ExecName)
 	exit(0);
 }
 
+
+
 //Write your functions here
 
-//Phase1: Warmup phase for parsing the structure here. Do it as per the PDF (Writeup)
+//Phase1: Warmup phase for parsing the structure here. Do it as per th PDF (Writeup)
 void show_targets(target_t targets[], int nTargetCount)
 {
-	//Write your warmup code here
-	
+
+
+	for(int i=0;i<nTargetCount;i++){
+		target_t curtarget = targets[i];
+		printf("Name of target: %s\n", curtarget.TargetName);
+		printf("\tNumber of dependencies: %d\n", curtarget.DependencyCount);
+		for(int j = 0;j<curtarget.DependencyCount;j++){
+				int x = find_target(curtarget.DependencyNames[j],targets,nTargetCount);
+				if(x == -1){
+						printf("\t\tTarget not found: %s\n",curtarget.DependencyNames[j]);
+				}
+				else{
+				printf("\t\tDependency %d is %s and location is index %d\n",j,curtarget.DependencyNames[j],x);
+		}
+		}
+	  printf("\tCommand: %s\n",curtarget.Command);
+	  printf("\n\n");
+	  }
+
+}
+
+// Depth first search traversal
+void traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
+		//find if target_name is name of target in array
+		int target_location = find_target(target_name,targets,nTargetCount);
+		if (target_location == -1){
+			printf("%s is not a target in the make \n",target_name );
+		}
+		else{
+				target_t current_target = targets[target_location];
+				for(int j=0; j<current_target.DependencyCount; j++){
+						traverse_graph(targets,nTargetCount,current_target.DependencyNames[j]);
+				}
+
+				printf("%s\n",current_target.Command);
+
+		}
+
+
+
 }
 
 /*-------------------------------------------------------END OF HELPER FUNCTIONS-------------------------------------*/
@@ -104,9 +144,9 @@ int main(int argc, char *argv[])
   //Phase1: Warmup-----------------------------------------------------------------------------------------------------
   //Parse the structure elements and print them as mentioned in the Project Writeup
   /* Comment out the following line before Phase2 */
-  show_targets(targets, nTargetCount);  
+  show_targets(targets, nTargetCount);
   //End of Warmup------------------------------------------------------------------------------------------------------
-   
+
   /*
    * Set Targetname
    * If target is not set, set it to default (first target from makefile)
@@ -124,13 +164,14 @@ int main(int argc, char *argv[])
    * etc. Else if no target is mentioned then build the first target
    * found in Makefile.
    */
-	
+
   //Phase2: Begins ----------------------------------------------------------------------------------------------------
   /*Your code begins here*/
-  
-  
-  
-  
+	traverse_graph(targets,nTargetCount,TargetName);
+
+
+
+
   /*End of your code*/
   //End of Phase2------------------------------------------------------------------------------------------------------
 
