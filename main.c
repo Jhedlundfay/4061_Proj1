@@ -64,13 +64,36 @@ void show_targets(target_t targets[], int nTargetCount)
 
 }
 
+
+int file_check(char filename[]){
+	int access_result = does_file_exist(filename);
+
+	if (access_result == -1) {
+	 	perror("File not found")
+	}
+	else{
+		return 0
+	}
+      }	
+
+
+
+
+
+
+
 // Depth first search traversal
 void traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
 		//find if target_name is name of target in array
 		int target_location = find_target(target_name,targets,nTargetCount);
 		if (target_location == -1){
-			printf("%s is not a target in the make \n",target_name );
-		}
+			if (file_check(target_name) == 1){
+				perror("Invalid name");
+				return -1;
+					}
+			else {
+				return 1
+	                	}
 		else{
 				target_t current_target = targets[target_location];
 				for(int j=0; j<current_target.DependencyCount; j++){
