@@ -42,7 +42,7 @@ void show_error_message(char * ExecName)
 //Phase1: Warmup phase for parsing the structure here. Do it as per th PDF (Writeup)
 void show_targets(target_t targets[], int nTargetCount)
 {
-<<<<<<< HEAD
+
 
 
 	for(int i=0;i<nTargetCount;i++){
@@ -83,11 +83,11 @@ void traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
 
 
 
-=======
+
 	//Write your warmup code here
 	//random comment
 	
->>>>>>> 09ddc73da610d279699e4cbcf623015c5a3177ef
+
 }
 
 /*-------------------------------------------------------END OF HELPER FUNCTIONS-------------------------------------*/
@@ -183,4 +183,5 @@ int main(int argc, char *argv[])
 
   return 0;
 }
+
 /*-------------------------------------------------------END OF MAIN PROGRAM------------------------------------------*/
