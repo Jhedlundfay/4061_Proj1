@@ -108,21 +108,26 @@ int traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
 		if (target_location == -1){
 			if (file_check(target_name) == 1){
 				perror("Invalid name");
-				return -1;
+				return ERROR;
 			}
 			else {
-			  return 1;
+			  return FINISHED;
 	               	}
 		}
 		else {
 		  target_t current_target = targets[target_location];
 		  for(int j=0; j<current_target.DependencyCount; j++){
+
 		    traverse_graph(targets,nTargetCount,current_target.DependencyNames[j]);
 		  }
 
-		  printf("%s\n",current_target.Command);
-		  return(fork_exec(current_target.Command));
-		}
+		 if((compare_modification_time(target_name, current_target.DependencyNames[j]) == NEEDS_BUILDING){
+                        printf("%s\n",current_target.Command);
+		        return(fork_exec(current_target.Command));
+		 }
+		 else{
+			return FINISHED;
+		     }
 }
 
 
