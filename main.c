@@ -120,14 +120,22 @@ int traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
 
 		    traverse_graph(targets,nTargetCount,current_target.DependencyNames[j]);
 		  }
+		}
 
-		 if((compare_modification_time(target_name, current_target.DependencyNames[j]) == NEEDS_BUILDING){
-                        printf("%s\n",current_target.Command);
-		        return(fork_exec(current_target.Command));
-		 }
-		 else{
-			return FINISHED;
-		     }
+		 target_t current_target = targets[target_location];
+		 
+
+		 for(int j=0; j<current_target.DependencyCount; j++){
+		 	if  (((compare_modification_time(target_name,current_target.DependencyNames[j])) == NEEDS_BUILDING)||
+			    ((compare_modification_time(target_name, current_target.DependencyNames[j])) == UNFINISHED)){
+                        	printf("%s\n",current_target.Command);
+		       		return(fork_exec(current_target.Command));
+			}
+			}
+		 
+		printf("%s finished \n",target_name);
+		return FINISHED;
+		
 }
 
 
