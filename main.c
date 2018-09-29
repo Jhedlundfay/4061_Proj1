@@ -69,49 +69,67 @@ int file_check(char filename[]){
 	int access_result = does_file_exist(filename);
 
 	if (access_result == -1) {
-	 	perror("File not found")
+	  perror("File not found");
 	}
 	else{
-		return 0
+	  return 0;
 	}
       }	
 
 
 
 
+int fork_exec(char current_command[]) {
+  pid_t parent = getpid();
+  pid_t pid = fork();
 
+  char *cmd[1023];
+  int result = parse_into_tokens(current_command,cmd," ");
+  
+
+  if (pid == -1) {
+    perror("Failed to fork");
+  }
+  else if (pid > 0) {
+    int status;
+    wait(&status);
+  }
+  else {
+    execvp(cmd[0], &cmd[1]);
+  }
+
+}
 
 
 // Depth first search traversal
-void traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
+int traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
 		//find if target_name is name of target in array
 		int target_location = find_target(target_name,targets,nTargetCount);
 		if (target_location == -1){
 			if (file_check(target_name) == 1){
 				perror("Invalid name");
 				return -1;
-					}
+			}
 			else {
-				return 1
-	                	}
-		else{
-				target_t current_target = targets[target_location];
-				for(int j=0; j<current_target.DependencyCount; j++){
-						traverse_graph(targets,nTargetCount,current_target.DependencyNames[j]);
-				}
-
-				printf("%s\n",current_target.Command);
-
+			  return 1;
+	               	}
 		}
+		else {
+		  target_t current_target = targets[target_location];
+		  for(int j=0; j<current_target.DependencyCount; j++){
+		    traverse_graph(targets,nTargetCount,current_target.DependencyNames[j]);
+		  }
+
+		  printf("%s\n",current_target.Command);
+		  return(fork_exec(current_target.Command));
+		}
+}
 
 
 
 
 	//Write your warmup code here
 	//random comment
-	
-
-}
 
 /*-------------------------------------------------------END OF HELPER FUNCTIONS-------------------------------------*/
 
@@ -180,10 +198,12 @@ int main(int argc, char *argv[])
    * Set Targetname
    * If target is not set, set it to default (first target from makefile)
    */
-  if(argc == 1)
-	strcpy(TargetName, argv[optind]);    // here we have the given target, this acts as a method to begin the building
-  else
-  	strcpy(TargetName, targets[0].TargetName);  // default part is the first target
+  if(argc == 1) {
+	strcpy(TargetName, argv[optind]);
+  } // here we have the given target, this acts as a method to begin the building
+  else {
+  	strcpy(TargetName, targets[0].TargetName);
+  } // default part is the first target
 
   /*
    * Now, the file has been parsed and the targets have been named.
@@ -196,7 +216,7 @@ int main(int argc, char *argv[])
 
   //Phase2: Begins ----------------------------------------------------------------------------------------------------
   /*Your code begins here*/
-	traverse_graph(targets,nTargetCount,TargetName);
+  return (traverse_graph(targets,nTargetCount,TargetName));
 
 
 
