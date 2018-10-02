@@ -95,7 +95,8 @@ int fork_exec(char current_command[]) {
     wait(&status);
   }
   else {
-    execvp(cmd[0], &cmd[1]);
+    printf("herees %s %s\n", cmd[0], cmd[1]);
+    execvp(cmd[0], cmd);
   }
 
 }
