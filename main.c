@@ -41,9 +41,9 @@ void show_error_message(char * ExecName)
 
 //Phase1: Warmup phase for parsing the structure here. Did it as per the PDF (Writeup)
 /* The function show_targets takes in a list (array) of nodes (defined in util.h),
-   where each struct has properties that we'd like to print out / traverse for this warm up. 
-   show_targets also takes in an integer : nTargetCount, which will be the starting address 
-   of this array structure. For each node in the array, we print out it's target. Now, for 
+   where each struct has properties that we'd like to print out / traverse for this warm up.
+   show_targets also takes in an integer : nTargetCount, which will be the starting address
+   of this array structure. For each node in the array, we print out it's target. Now, for
    each target in a node, we print out the number of dependencies it has, along with the names
    of those dependencies. Then for each dependency, we print out its command.
 */
@@ -66,7 +66,7 @@ void show_targets(target_t targets[], int nTargetCount){
         }
 }
 
-/* Thie funciton file_check is all in the name. Here, we use a given helpful function to 
+/* Thie funciton file_check is all in the name. Here, we use a given helpful function to
    check if a file exists. If it doesn't, an error is thrown. */
 int file_check(char filename[]){
 	int access_result = does_file_exist(filename);
@@ -76,14 +76,14 @@ int file_check(char filename[]){
 	else{
 		return 0;
 	}
- }	
+ }
 
 
-/* 
+/*
    The funciton fork_exec a helper function that contains our fork and excecution of
-   our processes. The format of using fork in fork_exec follows closely the discussion 
-   of fork() in class. To execute / print the correct command, we rely on the use of 
-   parse_into_tokens to make a command "string" (array of characters). 
+   our processes. The format of using fork in fork_exec follows closely the discussion
+   of fork() in class. To execute / print the correct command, we rely on the use of
+   parse_into_tokens to make a command "string" (array of characters).
 */
 
 int fork_exec(char current_command[]) {
@@ -91,54 +91,55 @@ int fork_exec(char current_command[]) {
   pid_t pid = fork();
 
 // Assumed that maximum characters on a line = 1023
-  char *cmd[1023];  
+  char *cmd[1023];
 
 // result helps us print later in the function
-  int result = parse_into_tokens(current_command,cmd," "); 
+  int result = parse_into_tokens(current_command,cmd," ");
 
   if (pid == -1) {
     perror("Failed to fork");
     exit(-1);
   }
   //parent process
-  if (pid > 0) {   
+  if (pid > 0) {
     int status;
 
    //wait for child
-    wait(&status); 
+    wait(&status);
     if(WEXITSTATUS(status) != 0)
 	{
 	  printf("Child exited with error code = %d\n", WEXITSTATUS(status));
 	  exit (-1);
 	}
-  } 
+  }
   else{
-  //child process  
+  //child process
 
     // Print out the command being executed here
-    for (int i=0; i<result;i++)  
+    for (int i=0; i<result;i++)
 	{
 	 printf("%s ",cmd[i]);
 	}
-     printf("\n"); 
+     printf("\n");
 
      // Execute command
-     execvp(cmd[0], cmd);        
+     execvp(cmd[0], cmd);
   }
-  
+
 return FINISHED;
 }
 
 
-/* The function traverse_graph uses a Depth-first-search traversal to enable the bottom-> up 
-   approach of executing leaf commands in a dependency tree first and working our way back 
-   "up" via recursion. 
+/* The function traverse_graph uses a Depth-first-search traversal to enable the bottom-> up
+   approach of executing leaf commands in a dependency tree first and working our way back
+   "up" via recursion.
 
 */
 int traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
 		//find if target_name is name of target in array
 		int target_location = find_target(target_name,targets,nTargetCount);
 		if (target_location == -1){
+			//if not a target, check if it's a file in the current directory. Raise error if not.
 			if (file_check(target_name) == 1){
 				perror("Invalid name");
 				return ERROR;
@@ -151,25 +152,25 @@ int traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
 		}
 		else {
 
-                  //Set a point of reference to the current target
+      //Set a point of reference to the current target
 		  target_t current_target = targets[target_location];
-		
+
 		  //If the current target has dependencies, recursively call that dependency
-		  for(int j=0; j<current_target.DependencyCount; j++){ 
+		  for(int j=0; j<current_target.DependencyCount; j++){
 
 		    traverse_graph(targets,nTargetCount,current_target.DependencyNames[j]);
-			
+
 		  }
 		}
-		
-		 //If we end up here, we are at a leaf
+
+		 //If we end up here, current target's dependencies have been processed (if it has any)
 		 target_t current_target = targets[target_location];
- 
+
 		//If the leaf has no dependencies, execute its command
 		if (current_target.DependencyCount == 0){
 			 return(fork_exec(current_target.Command));
 		   }
-		 //If the leaf has dependencies, then only execute the command if the files were updated 
+		 //If the leaf has dependencies, then only execute the command if the files were updated
 		 for(int j=0; j<current_target.DependencyCount; j++){
 			int comp = compare_modification_time(target_name,current_target.DependencyNames[j]);
 			if ((comp == NEEDS_BUILDING) || (comp == UNFINISHED) || (comp == ERROR))
@@ -179,8 +180,8 @@ int traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
 		     }
 
 		return FINISHED;
-            
-		
+
+
 }
 
 //Our (students) functions end here
@@ -247,7 +248,7 @@ int main(int argc, char *argv[])
 
 
   //If you un-comment our show_targets (below), you may see our warmup work
-  //show_targets(targets, nTargetCount);  
+  //show_targets(targets, nTargetCount);
 
 
   //End of Warmup------------------------------------------------------------------------------------------------------
