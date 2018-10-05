@@ -173,7 +173,7 @@ int traverse_graph(target_t targets[],int nTargetCount,char target_name[]){
 		 //If the leaf has dependencies, then only execute the command if the files were updated
 		 for(int j=0; j<current_target.DependencyCount; j++){
 			int comp = compare_modification_time(target_name,current_target.DependencyNames[j]);
-			if ((comp == NEEDS_BUILDING) || (comp == UNFINISHED) || (comp == ERROR))
+			if ((comp == NEEDS_BUILDING)||(comp == ERROR))
 			   {
 				return(fork_exec(current_target.Command));
 			   }
