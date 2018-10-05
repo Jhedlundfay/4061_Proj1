@@ -1,0 +1,25 @@
+/* CSci4061 S2018 Assignment 1
+* login: cselabs login name (login used to submit)
+* date: 10/03/18
+* name: Christopher Pieper, Zaffer Hussein, John Hedlund-Fay (for partner(s))
+* id: 5160800, 5236353, 5181960 */
+
+
+/*
+    Our group was able to manage the workload of this project fairly well.
+
+   (1) To start off, Zaffer was able to solve our warm up (phase 1). In that code,
+   we were able to both traverse the array of nodes (given) using a for loop,
+   as well as using recursion (which is the version we used to develop the rest
+   of our solutions for this project).
+
+   (2) Meanwhile, John created the backbone of our fork_exec function, which is
+   called within the depth-first-traversal when appropriate.
+
+   (3) Chris updated both of the above functions to meet the printing standards for emulating gnu make,
+       along with fixing an error with timestamps of files.  He also debugged the code with trial and error on
+       running ./make4061 on all test cases given.
+
+    All other details were mostly done collaboratively.
+
+*/
