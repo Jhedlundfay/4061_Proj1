@@ -1,8 +1,8 @@
 /* CSci4061 S2018 Assignment 1
 * login: cselabs login name (login used to submit)
 * date: 10/03/18
-* name: Christopher Pieper, Zaffer Hussein, full name3 (for partner(s))
-* id: 5160800, 5236353, id for third name */
+* name: Christopher Pieper, Zaffer Hussein, John Hedlund-Fay)
+* id: 5160800, 5236353, 5181960 */
 
 
 /*
@@ -13,7 +13,7 @@
    as well as using recursion (which is the version we used to develop the rest
    of our solutions for this project).
 
-   (2) Meanwhile, Jon created the backbone of our fork_exec function, which is
+   (2) Meanwhile, John created the backbone of our fork_exec function, which is
    called within the depth-first-traversal when appropriate.
 
    (3) Chris updated both of the above functions to meet the printing standards for emulating gnu make,
